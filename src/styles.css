@@ -1,0 +1,21 @@
+html, body{
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-width: 100vh;
+}
+
+.container{
+    margin: 20px auto;
+    max-width: 800px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h2{
+    color: #2f9e41;
+}
