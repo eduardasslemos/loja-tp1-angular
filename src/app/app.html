@@ -1,7 +1,7 @@
-<app-header></app-header>
-<app-banner></app-banner>
-<div class="container">
+<app-header [titulo]="title()" (textoSobre)="receberSobre($event)"></app-header>
+<main class="container">
   <h2>Angular - Aula 02</h2>
-  <p>Em construção</p>
-</div>
+  <app-quantidade-controle></app-quantidade-controle>
+  <p>{{ sobre }}</p>
+</main>
 <app-footer></app-footer>
