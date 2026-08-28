@@ -1,8 +1,32 @@
 <section class="catalogo">
-    <h2>Produtos</h2>
+    <!-- <h2>Produtos</h2>
     <div class="grid">
         <app-card-produto [produto]="produtos[0]" (view)="onViewProduct($event)" (add)="onAddProduct($event)"/>
         <app-card-produto [produto]="produtos[1]" (view)="onViewProduct($event)" (add)="onAddProduct($event)"/>
         <app-card-produto [produto]="produtos[2]" (view)="onViewProduct($event)" (add)="onAddProduct($event)"/>
-    </div>
+    </div> -->
+
+    <header class="barradetarefas">
+        <h2>Catálogo</h2>
+        <button class="btn sopromo" [class.active]="apenasPromo()"
+                                    (click)="alternarPromo()">
+            @if(apenasPromo()){
+                Mostrar todos
+            }
+            @else {
+                Promoções
+            }
+        </button>
+    </header>
+
+    @if(produtosExibidos().length === 0){
+        <p class="vazio">Nenhum produto encontrado para ser exibido.</p>
+    }
+    @else {
+        <div class="grid">
+            @for(prod of produtosExibidos(); track prod.id){
+                <app-card-produto [produto]="prod" (view)="onViewProduct($event)" (add)="onAddProduct($event)"/>
+            }
+        </div>
+    }
 </section>
