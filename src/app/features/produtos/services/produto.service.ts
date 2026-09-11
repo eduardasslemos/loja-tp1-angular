@@ -54,6 +54,10 @@ export class ProdutoService {
       delay(250)
     );
   }
+
+  getById(id: number): Observable<Produto | undefined>{
+    return of(this.listaMock.find(p => p.id == id)).pipe(delay(500));
+  }
 }
 
 
