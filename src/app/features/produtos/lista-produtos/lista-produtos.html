@@ -18,8 +18,10 @@
             }
         </button>
     </header>
-
-    @if(produtosExibidos().length === 0){
+    @if(carregando()){
+        <p>Carregando produtos...</p>
+    }
+    @else if(produtosExibidos().length === 0){
         <p class="vazio">Nenhum produto encontrado para ser exibido.</p>
     }
     @else {
