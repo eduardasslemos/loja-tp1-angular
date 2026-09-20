@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { LoggerService } from '../../../core/services/logger/logger.service';
 import { Produto, ProdutoMapper } from '../../../model/produto';
-import { catchError, delay, map, Observable, of } from 'rxjs';
+import { catchError, delay, map, Observable, of, throwError } from 'rxjs';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -52,19 +52,64 @@ export class ProdutoService {
     }
   ];
 
-  listar(): Observable<Produto[]>{
-    this.logger.info("[PRODUTO SERVICE] - Retornando lista de produtos")
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map(lista => lista.map(prod => ProdutoMapper.fromJson(prod))),
+  getCategorias(): Observable<string[]> {
+    this.logger.info('[PRODUTO SERVICE] - Buscando lista de categorias');
+    return this.http.get<string[]>(`${this.apiUrl}/categories`).pipe(
       catchError(erro => {
-        this.logger.error("[PRODUTO SERVICE] - Retornando lista de produtos");
+        this.logger.error('[PRODUTO SERVICE] - Erro ao buscar categorias');
         return of([]);
       })
-    )
+    );
   }
 
-  getById(id: number): Observable<Produto | undefined>{
-    return of(this.listaMock.find(p => p.id == id)).pipe(delay(500));
+  // listar(): Observable<Produto[]>{
+  //   this.logger.info("[PRODUTO SERVICE] - Retornando lista de produtos")
+  //   return this.http.get<any[]>(this.apiUrl).pipe(
+  //     map(lista => lista.map(prod => ProdutoMapper.fromJson(prod))),
+  //     catchError(erro => {
+  //       this.logger.error("[PRODUTO SERVICE] - Retornando lista de produtos");
+  //       return of([]);
+  //     })
+  //   )
+  // }
+
+  listar(categoria?: string): Observable<Produto[]> {
+    this.logger.info(`[PRODUTO SERVICE] - Retornando lista de produtos ${categoria ? 'para categoria: ' + categoria : 'todas'}`);
+
+    const url = categoria 
+      ? `${this.apiUrl}/category/${categoria}` 
+      : this.apiUrl;
+
+    return this.http.get<any[]>(url).pipe(
+      map(lista => lista.map(prod => ProdutoMapper.fromJson(prod))),
+      catchError(erro => {
+        this.logger.error('[PRODUTO SERVICE] - Erro na requisição HTTP');
+        return throwError(() => erro);
+      })
+    );
+  }
+
+  // getById(id: number): Observable<Produto | undefined>{
+  //   return of(this.listaMock.find(p => p.id == id)).pipe(delay(500));
+  // }
+
+  getById(id: number): Observable<Produto | undefined> {
+    this.logger.info(`[PRODUTO SERVICE] - Buscando produto com id ${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(prod => {
+     
+        if (!prod || Object.keys(prod).length === 0) {
+          return undefined;
+        }
+       
+        return ProdutoMapper.fromJson(prod);
+      }),
+      catchError(erro => {
+        this.logger.error(`[PRODUTO SERVICE] - Erro ao buscar produto com id ${id}`);
+      
+        return of(undefined);
+      })
+    );
   }
 }
 

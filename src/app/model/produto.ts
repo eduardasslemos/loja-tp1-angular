@@ -5,6 +5,7 @@ export interface Produto {
     nome: string;
     preco: number;
     descricao: string;
+    categoria?: string;
     imagemUrl?: string;
     promo?: boolean;
     estado?: 'novo' | 'usado' | 'esgotado';
@@ -19,6 +20,7 @@ export class ProdutoMapper{
             nome: json.title,
             preco: json.price,
             descricao: json.description,
+            categoria: json.category,
             imagemUrl: json.image,
             promo: json.id % 5 == 0 && _estado != 'esgotado',
             estado: _estado

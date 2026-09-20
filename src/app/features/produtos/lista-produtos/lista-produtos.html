@@ -8,25 +8,36 @@
 
     <header class="barradetarefas">
         <h2>Catálogo</h2>
-        <button class="btn sopromo" [class.active]="apenasPromo()"
-                                    (click)="alternarPromo()">
-            @if(apenasPromo()){
-                Mostrar todos
-            }
-            @else {
-                Promoções
-            }
-        </button>
+
+        <div class="filtros">
+            <select class="btn categorias" id="selectCategoria" (change)="onCategoriaChange($event)">
+                <option value="">Todas as categorias</option>
+                @for (cat of categorias(); track cat) {
+                    <option [value]="cat">{{ cat }}</option>
+                }
+            </select>
+
+            <button class="btn sopromo" [class.active]="apenasPromo()" (click)="alternarPromo()">
+                @if (apenasPromo()) {
+                    Mostrar todos
+                } @else {
+                    Promoções
+                }
+            </button>
+        </div>
     </header>
-    @if(carregando()){
+    @if (carregando()) {
         <p>Carregando produtos...</p>
-    }
-    @else if(produtosExibidos().length === 0){
+    } 
+    @else if (erroRede()) {
+        <p class="vazio erro">Erro ao carregar produtos. Tente novamente.</p>
+    } 
+    @else if (produtosExibidos().length === 0) {
         <p class="vazio">Nenhum produto encontrado para ser exibido.</p>
-    }
+    } 
     @else {
         <div class="grid">
-            @for(prod of produtosExibidos(); track prod.id){
+            @for (prod of produtosExibidos(); track prod.id) {
                 <app-card-produto [produto]="prod" (view)="onViewProduct($event)" (add)="onAddProduct($event)"/>
             }
         </div>
