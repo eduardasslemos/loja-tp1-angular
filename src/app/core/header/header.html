@@ -5,5 +5,9 @@
         <a routerLink="/">Home</a>
         <a routerLink="/produtos">Produtos</a>
         <a routerLink="/sobre">Sobre</a>
+        <a class="cart-wrapper" routerLink="/carrinho">
+            <span class="cart-icon">🛒</span>
+            <span class="badge">{{qtdCarrinho()}}</span>
+        </a>
     </nav>
 </header>
